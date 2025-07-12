@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Brain Tumor Segmentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='dashboard.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-brain me-2"></i>
+                NeuroScan AI
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#analysis" id="nav-analysis">
+                            <i class="fas fa-brain me-1"></i>
+                            Analysis
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#history">
+                            <i class="fas fa-history me-1"></i>
+                            History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reports">
+                            <i class="fas fa-file-medical me-1"></i>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#settings">
+                            <i class="fas fa-cog me-1"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="user-name">Dr.Muqadas Shazad</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#profile">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#settings">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="dashboard-title">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </h1>
+                        <p class="dashboard-subtitle">Welcome back! Here's your analysis overview.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <button class="btn btn-primary btn-lg" id="new-analysis-btn">
+                            <i class="fas fa-plus me-2"></i>
+                            New Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-primary">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 class="stats-number" id="total-analyses">0</h3>
+                            <p class="stats-label">Total Analyses</p>
+                            <small class="stats-change text-success">
+                                <i class="fas fa-chart-line"></i> Growing
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 class="stats-number" id="completed-analyses">0</h3>
+                            <p class="stats-label">Completed</p>
+                            <small class="stats-change text-success">
+                                <i class="fas fa-check-circle"></i> Success Rate
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 class="stats-number" id="tumor-detected">0</h3>
+                            <p class="stats-label">Tumors Detected</p>
+                            <small class="stats-change text-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Critical Cases
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-icon bg-info">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 class="stats-number" id="reports-generated">0</h3>
+                            <p class="stats-label">Reports Generated</p>
+                            <small class="stats-change text-info">
+                                <i class="fas fa-file-medical"></i> Available
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div class="row g-4 mb-4" id="analysis-section">
+                <div class="col-12">
+                    <div class="dashboard-card analysis-card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="fas fa-brain me-3"></i>
+                                AI Brain Tumor Analysis
+                            </h4>
+                            <div class="header-actions">
+                                <span class="badge bg-success me-2">
+                                    <i class="fas fa-robot me-1"></i>
+                                    AI Powered
+                                </span>
+                                <button class="btn btn-outline-primary btn-sm" id="toggle-analysis">
+                                    <i class="fas fa-chevron-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="analysis-content">
+                            <!-- Upload Section -->
+                            <div class="upload-section mb-4">
+                                <div class="section-header mb-4">
+                                    <h5 class="section-title">
+                                        <i class="fas fa-upload me-2"></i>
+                                        Upload MRI Sequences
+                                    </h5>
+                                    <p class="section-description">
+                                        Upload both FLAIR and T1CE sequences for comprehensive brain tumor analysis
+                                    </p>
+                                </div>
+                                <div class="row g-4">
+                                    <div class="col-lg-6">
+                                        <div class="upload-zone">
+                                            <div class="upload-icon">
+                                                <i class="fas fa-file-medical"></i>
+                                            </div>
+                                            <h5 class="upload-title">FLAIR Sequence</h5>
+                                            <p class="upload-description">Fluid Attenuated Inversion Recovery<br>(.nii/.nii.gz format)</p>
+                                            <input type="file" class="form-control upload-input" id="flair-file" name="flair"
+                                                   accept=".nii,.nii.gz" required>
+                                            <div class="upload-status" id="flair-status"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="upload-zone">
+                                            <div class="upload-icon">
+                                                <i class="fas fa-file-medical"></i>
+                                            </div>
+                                            <h5 class="upload-title">T1CE Sequence</h5>
+                                            <p class="upload-description">T1 Contrast Enhanced<br>(.nii/.nii.gz format)</p>
+                                            <input type="file" class="form-control upload-input" id="t1ce-file" name="t1ce"
+                                                   accept=".nii,.nii.gz" required>
+                                            <div class="upload-status" id="t1ce-status"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Analysis Controls -->
+                            <div class="controls-section">
+                                <div class="section-header mb-4">
+                                    <h5 class="section-title">
+                                        <i class="fas fa-cogs me-2"></i>
+                                        Analysis Parameters
+                                    </h5>
+                                    <p class="section-description">
+                                        Configure analysis settings and patient information
+                                    </p>
+                                </div>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="slice-index" class="form-label">
+                                                <i class="fas fa-layer-group me-2"></i>
+                                                Slice Index
+                                            </label>
+                                            <input type="number" class="form-control form-control-lg" id="slice-index"
+                                                   value="75" min="0" max="200">
+                                            <small class="form-text text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Select which slice to analyze (0-200)
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <i class="fas fa-user-tag me-2"></i>
+                                                Patient ID (Optional)
+                                            </label>
+                                            <input type="text" class="form-control form-control-lg" id="patient-id"
+                                                   placeholder="e.g., PT-001">
+                                            <small class="form-text text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                For tracking and organization
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <button type="button" class="btn btn-primary btn-lg w-100 analyze-button" id="analyze-btn">
+                                            <i class="fas fa-brain me-2"></i>
+                                            <span>Analyze Brain Scan</span>
+                                            <i class="fas fa-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Progress Section -->
+                            <div id="progress-section" class="progress-section" style="display: none;">
+                                <div class="progress-content">
+                                    <div class="progress-icon">
+                                        <i class="fas fa-brain fa-spin"></i>
+                                    </div>
+                                    <h4>Analyzing Brain Scan</h4>
+                                    <p>AI is processing your MRI images...</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                             role="progressbar" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="row g-4 mb-4" id="results-section" style="display: none;">
+                <div class="col-lg-7">
+                    <div class="dashboard-card results-card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="fas fa-microscope me-3"></i>
+                                AI Segmentation Results
+                            </h4>
+                            <div class="header-actions">
+                                <span class="badge bg-success me-2">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Analysis Complete
+                                </span>
+                                <button class="btn btn-outline-primary btn-sm" id="fullscreen-btn">
+                                    <i class="fas fa-expand me-1"></i>
+                                    Fullscreen
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="image-container">
+                                <div class="image-wrapper">
+                                    <img id="result-image" class="result-image" alt="Segmentation Results">
+                                    <div class="image-overlay">
+                                        <div class="overlay-content">
+                                            <i class="fas fa-search-plus"></i>
+                                            <span>Click to view fullscreen</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image-info mt-3">
+                                <div class="info-card">
+                                    <div class="info-header">
+                                        <i class="fas fa-palette me-2"></i>
+                                        Color Legend
+                                    </div>
+                                    <div class="color-legend">
+                                        <div class="legend-item">
+                                            <span class="color-dot" style="background: #ff0000;"></span>
+                                            <span>Necrotic/Core</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="color-dot" style="background: #0000ff;"></span>
+                                            <span>Edema</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="color-dot" style="background: #00ff00;"></span>
+                                            <span>Enhancing</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="color-dot" style="background: #000000;"></span>
+                                            <span>Background</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="dashboard-card analysis-summary-card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="fas fa-chart-line me-3"></i>
+                                Analysis Summary
+                            </h4>
+                            <div class="header-actions">
+                                <span class="badge bg-info me-2" id="analysis-timestamp">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Just now
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Tumor Status -->
+                            <div class="status-section mb-3">
+                                <div class="section-header mb-3">
+                                    <h6 class="analysis-subtitle">
+                                        <i class="fas fa-heartbeat me-2"></i>
+                                        Clinical Assessment
+                                    </h6>
+                                </div>
+                                <div id="tumor-status" class="status-alert"></div>
+                            </div>
+
+                            <!-- Key Metrics -->
+                            <div class="metrics-section mb-3">
+                                <div class="section-header mb-3">
+                                    <h6 class="analysis-subtitle">
+                                        <i class="fas fa-calculator me-2"></i>
+                                        Key Metrics
+                                    </h6>
+                                </div>
+                                <div class="metrics-grid">
+                                    <div class="metric-card">
+                                        <div class="metric-icon bg-primary">
+                                            <i class="fas fa-percentage"></i>
+                                        </div>
+                                        <div class="metric-content">
+                                            <div class="metric-value" id="tumor-percentage">0%</div>
+                                            <div class="metric-label">Tumor Coverage</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-icon bg-success">
+                                            <i class="fas fa-layer-group"></i>
+                                        </div>
+                                        <div class="metric-content">
+                                            <div class="metric-value" id="slice-analyzed">75</div>
+                                            <div class="metric-label">Slice Analyzed</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-icon bg-warning">
+                                            <i class="fas fa-brain"></i>
+                                        </div>
+                                        <div class="metric-content">
+                                            <div class="metric-value" id="total-pixels">0</div>
+                                            <div class="metric-label">Total Pixels</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-icon bg-danger">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="metric-content">
+                                            <div class="metric-value" id="tumor-pixels">0</div>
+                                            <div class="metric-label">Tumor Pixels</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tissue Breakdown -->
+                            <div class="analysis-section mb-3">
+                                <div class="section-header mb-3">
+                                    <h6 class="analysis-subtitle">
+                                        <i class="fas fa-chart-pie me-2"></i>
+                                        Tissue Composition
+                                    </h6>
+                                </div>
+                                <div id="tissue-breakdown" class="tissue-breakdown"></div>
+                            </div>
+
+                            <!-- Download Actions -->
+                            <div class="analysis-actions">
+                                <div class="section-header mb-3">
+                                    <h6 class="analysis-subtitle">
+                                        <i class="fas fa-download me-2"></i>
+                                        Export Options
+                                    </h6>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary w-100 mb-2" id="download-jpg-report">
+                                        <i class="fas fa-image me-2"></i>
+                                        <span>Download Medical Report</span>
+                                        <small class="d-block mt-1">High-quality JPG with analysis</small>
+                                    </button>
+                                    <button class="btn btn-outline-primary w-100 mb-2" id="download-report">
+                                        <i class="fas fa-file-text me-2"></i>
+                                        <span>Download Text Summary</span>
+                                    </button>
+                                    <button class="btn btn-outline-secondary w-100" id="new-analysis-btn-results">
+                                        <i class="fas fa-plus me-2"></i>
+                                        <span>Start New Analysis</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main Dashboard Content -->
+            <div class="row g-4">
+                <!-- Recent Analyses -->
+                <div class="col-12">
+                    <div class="dashboard-card history-card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="fas fa-history me-3"></i>
+                                Analysis History
+                            </h4>
+                            <div class="header-actions">
+                                <span class="badge bg-info me-2" id="history-count">
+                                    <i class="fas fa-database me-1"></i>
+                                    0 Records
+                                </span>
+                                <a href="#history" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-external-link-alt me-1"></i>
+                                    View All
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="no-analyses" class="empty-state" style="display: none;">
+                                <div class="empty-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h5>No Analyses Yet</h5>
+                                <p>Start your first brain tumor analysis to see results here</p>
+                                <button class="btn btn-primary" onclick="dashboard.showAnalysisSection()">
+                                    <i class="fas fa-plus me-2"></i>
+                                    Start Analysis
+                                </button>
+                            </div>
+                            <div class="table-responsive" id="analyses-table">
+                                <table class="table table-hover modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <i class="fas fa-calendar me-1"></i>
+                                                Date
+                                            </th>
+                                            <th>
+                                                <i class="fas fa-user-tag me-1"></i>
+                                                Patient ID
+                                            </th>
+                                            <th>
+                                                <i class="fas fa-layer-group me-1"></i>
+                                                Slice
+                                            </th>
+                                            <th>
+                                                <i class="fas fa-tasks me-1"></i>
+                                                Status
+                                            </th>
+                                            <th>
+                                                <i class="fas fa-chart-line me-1"></i>
+                                                Result
+                                            </th>
+                                            <th>
+                                                <i class="fas fa-cogs me-1"></i>
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-analyses">
+                                        <!-- Dynamic content will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
